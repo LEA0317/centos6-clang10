@@ -59,9 +59,11 @@ RUN cd /home/${USER} && \
 RUN cd /home/${USER} && \
     wget https://github.com/ninja-build/ninja/archive/v1.10.0.tar.gz && \
     tar -xf v1.10.0.tar.gz && \
+    rm v1.10.0.tar.gz && \
     cd ninja-1.10.0 && \
     python configure.py --bootstrap && \
-    mv ninja /usr/local/bin/
+    mv ninja /usr/local/bin/ && \
+    cd /home/${USER} && rm -r ninja-1.10.0
 
 RUN cd /home/${USER}/ && \
     wget https://github.com/llvm/llvm-project/archive/llvmorg-10.0.1.tar.gz && \
@@ -71,7 +73,8 @@ RUN cd /home/${USER}/ && \
     mkdir build && \
     cd build && \
     cmake .. -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_ENABLE_PROJECTS="clang;lld" -DCMAKE_BUILD_TYPE=Release -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local/ -DCMAKE_C_COMPILER=/usr/local/bin/gcc -DCMAKE_CXX_COMPILER=/usr/local/bin/g++ && \
-    ninja all && ninja install
+    ninja all && ninja install && \
+    cd /home/${USER} && rm -r llvm-project-llvmorg-10.0.1
 
 USER ${USER}
 WORKDIR /home/${USER}
